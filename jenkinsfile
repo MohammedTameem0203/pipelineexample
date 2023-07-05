@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage ('code') {
+           steps {
+              git credentialsId: 'a1db3586-86f7-4ca2-8bc8-78f0acec36b4', url: 'https://github.com/MohammedTameem0203/maven_demo.git' 
+           }
+        }
+        stage ('build') {
+           steps {
+              bat 'mvn clean package'
+            }
+        }
+        stage ('deploy') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: '363c69b5-6069-42a9-b28b-82a1cf9e8fed', path: '', url: 'http://localhost:9090/')], contextPath: 'declarativegame1', war: '**/*.war'
+            }
+        }
+    }   
+}
